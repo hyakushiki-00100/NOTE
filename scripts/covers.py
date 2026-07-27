@@ -96,6 +96,21 @@ def shuhari():
     d.text((126, 436), "型を守り、破り、そして離れる", font=font(42), fill=INK)
     return _save(img, "shuhari_cover.png")
 
+# ---- ネガティブ・ケイパビリティ(有料・単発): 閉じない円 + 宙吊りの点 ----
+def negcap():
+    img = Image.new("RGB", (W, H), BG)
+    d = ImageDraw.Draw(img)
+    cx, cy, r = 1018, 300, 170
+    # 閉じない円(下部に開き=結論を出さない)
+    d.arc([cx-r, cy-r, cx+r, cy+r], start=110, end=430, fill=INK, width=2)
+    # 宙吊りの点(未解決を、閉じずに抱える)
+    d.ellipse([cx-11, cy-11, cx+11, cy+11], fill=ACCENT)
+    # 見出し(長い語なので和文フレーズを主役、概念名を副題)
+    draw_spaced(d, "わからなさに耐える", 118, 244, font(72), INK, 5)
+    d.line([(126, 366), (300, 366)], fill=ACCENT, width=3)
+    d.text((126, 398), "ネガティブ・ケイパビリティ", font=font(38), fill=INK)
+    return _save(img, "negcap_cover.png")
+
 # ---- 二十四節気シリーズ(無料・連載): シリーズ見出し + 24分割の年輪 ----
 CYCLE = ["立春","雨水","啓蟄","春分","清明","穀雨","立夏","小満","芒種","夏至","小暑","大暑",
          "立秋","処暑","白露","秋分","寒露","霜降","立冬","小雪","大雪","冬至","小寒","大寒"]
@@ -146,6 +161,8 @@ def main(argv):
         wabisabi()
     elif len(argv) >= 2 and argv[1] == "shuhari":
         shuhari()
+    elif len(argv) >= 2 and argv[1] == "negcap":
+        negcap()
     elif len(argv) >= 3 and argv[1] == "sekki":
         sekki(argv[2])
     else:
