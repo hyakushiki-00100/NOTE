@@ -23,8 +23,17 @@
 - 既出テーマ(雨系/華系/吽・阿吽、および禅語シリーズ既出)と重複しない。
 
 ## ファイル規約
-- 保存先: `articles/sekki_<slug>_note.md`(slug は `data/sekki_schedule.tsv` 参照。例 `articles/sekki_risshu_note.md`)。
-- **同じ slug の記事が既にあれば再生成しない**(重複防止)。
+- 記事: `articles/sekki_<slug>_note.md`(slug は `data/sekki_schedule.tsv` 参照。例 `articles/sekki_risshu_note.md`)。
+- カバー: `covers/sekki_<slug>_cover.png`。生成は `python3 scripts/covers.py sekki <slug>`。
+- **同じ slug の記事/カバーが既にあれば再生成しない**(重複防止)。
+
+## カバー(節気シリーズ専用デザイン・侘び寂び等と差別化)
+- 侘び寂び(有料・単発)とは別ラインナップと分かる意匠にする。
+- 上部に「二十四節気 ── 季節のことば」のシリーズ見出し、節気名を主役、**24分割の年輪**(立春が上・時計回り)で該当節気をアクセント表示。
+- note 推奨比 **1280×670**、ブランド3色、IPA明朝。`scripts/covers.py` が `data/sekki_schedule.tsv` の「よみ/カバー一言」を読んで生成する。
+
+## スケジュール表(`data/sekki_schedule.tsv`)の列
+`slug` / `節気` / `よみ` / `概算日(YYYY-MM-DD)` / `カバー一言` / `季節メモ・切り口`(タブ区切り、`#` はコメント)。
 
 ## ハッシュタグ(日本語・投稿数は note 検索で要確認)
 - 共通枠: `#二十四節気` + 記事固有(節気名)+ 暮らし系(`#季節のことば` `#暮らし` など)。
