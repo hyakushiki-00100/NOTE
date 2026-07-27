@@ -65,6 +65,37 @@ def wabisabi():
     d.text((126, 436), "欠けたところに、光がたまる", font=font(42), fill=INK)
     return _save(img, "wabisabi_cover.png")
 
+# ---- 守破離(有料・単発): 型の三段階を幾何学で(守=完全 / 破=欠け / 離=痕跡) ----
+def _square(d, cx, cy, s, **kw):
+    d.rectangle([cx-s, cy-s, cx+s, cy+s], **kw)
+
+def shuhari():
+    img = Image.new("RGB", (W, H), BG)
+    d = ImageDraw.Draw(img)
+    cy, s = 300, 66
+    xs = [795, 965, 1135]
+    # 守: 完全な四角(型そのまま)
+    _square(d, xs[0], cy, s, outline=INK, width=2)
+    # 破: 上辺の中央が開き、外れた一片がずれて置かれる
+    d.line([(xs[1]-s, cy-s), (xs[1]-22, cy-s)], fill=INK, width=2)
+    d.line([(xs[1]+22, cy-s), (xs[1]+s, cy-s)], fill=INK, width=2)
+    d.line([(xs[1]+s, cy-s), (xs[1]+s, cy+s)], fill=INK, width=2)
+    d.line([(xs[1]+s, cy+s), (xs[1]-s, cy+s)], fill=INK, width=2)
+    d.line([(xs[1]-s, cy+s), (xs[1]-s, cy-s)], fill=INK, width=2)
+    d.line([(xs[1]-20, cy-s-16), (xs[1]+20, cy-s-16)], fill=ACCENT, width=4)  # 外れた一片
+    # 離: 四隅の痕跡だけ残り、中心に芯(本を忘るな)
+    c = 20
+    for dx, dy in [(-s, -s), (s, -s), (s, s), (-s, s)]:
+        x0, y0 = xs[2]+dx, cy+dy
+        d.line([(x0 - (c if dx > 0 else -c), y0), (x0, y0)], fill=INK, width=2)
+        d.line([(x0, y0 - (c if dy > 0 else -c)), (x0, y0)], fill=INK, width=2)
+    d.ellipse([xs[2]-9, cy-9, xs[2]+9, cy+9], fill=ACCENT)
+    # タイトル
+    draw_spaced(d, "守破離", 118, 214, font(140), INK, 22)
+    d.line([(126, 404), (300, 404)], fill=ACCENT, width=3)
+    d.text((126, 436), "型を守り、破り、そして離れる", font=font(42), fill=INK)
+    return _save(img, "shuhari_cover.png")
+
 # ---- 二十四節気シリーズ(無料・連載): シリーズ見出し + 24分割の年輪 ----
 CYCLE = ["立春","雨水","啓蟄","春分","清明","穀雨","立夏","小満","芒種","夏至","小暑","大暑",
          "立秋","処暑","白露","秋分","寒露","霜降","立冬","小雪","大雪","冬至","小寒","大寒"]
@@ -113,6 +144,8 @@ def sekki(slug):
 def main(argv):
     if len(argv) >= 2 and argv[1] == "wabisabi":
         wabisabi()
+    elif len(argv) >= 2 and argv[1] == "shuhari":
+        shuhari()
     elif len(argv) >= 3 and argv[1] == "sekki":
         sekki(argv[2])
     else:
