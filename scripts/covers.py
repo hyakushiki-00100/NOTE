@@ -111,6 +111,33 @@ def negcap():
     d.text((126, 398), "ネガティブ・ケイパビリティ", font=font(38), fill=INK)
     return _save(img, "negcap_cover.png")
 
+# ---- 大器晩成(有料・単発): 外へ開き続ける渦巻き(完成点を持たない成長) ----
+def taikibansei():
+    img = Image.new("RGB", (W, H), BG)
+    d = ImageDraw.Draw(img)
+    cx, cy = 995, 335
+    # 中心の小さな種(始点)
+    d.ellipse([cx-6, cy-6, cx+6, cy+6], fill=ACCENT)
+    # 外へ開き続ける渦巻き(閉じずに終わる=完成点を持たない)
+    import math as _m
+    pts = []
+    turns = 2.6
+    steps = 260
+    for i in range(steps + 1):
+        t = i / steps
+        theta = t * turns * 2 * _m.pi
+        r = 10 + t * 190
+        pts.append((cx + r * _m.sin(theta), cy - r * _m.cos(theta)))
+    d.line(pts, fill=INK, width=2, joint="curve")
+    # 渦の先端(まだ閉じていない=成長の途中)をアクセントで示す
+    ex, ey = pts[-1]
+    d.ellipse([ex-7, ey-7, ex+7, ey+7], fill=ACCENT)
+    # タイトル
+    draw_spaced(d, "大器晩成", 118, 214, font(120), INK, 20)
+    d.line([(126, 372), (300, 372)], fill=ACCENT, width=3)
+    d.text((126, 404), "大器は、完成しない", font=font(42), fill=INK)
+    return _save(img, "taikibansei_cover.png")
+
 # ---- 二十四節気シリーズ(無料・連載): シリーズ見出し + 24分割の年輪 ----
 CYCLE = ["立春","雨水","啓蟄","春分","清明","穀雨","立夏","小満","芒種","夏至","小暑","大暑",
          "立秋","処暑","白露","秋分","寒露","霜降","立冬","小雪","大雪","冬至","小寒","大寒"]
@@ -163,6 +190,8 @@ def main(argv):
         shuhari()
     elif len(argv) >= 2 and argv[1] == "negcap":
         negcap()
+    elif len(argv) >= 2 and argv[1] == "taikibansei":
+        taikibansei()
     elif len(argv) >= 3 and argv[1] == "sekki":
         sekki(argv[2])
     else:
