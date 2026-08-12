@@ -138,6 +138,30 @@ def taikibansei():
     d.text((126, 404), "大器は、完成しない", font=font(42), fill=INK)
     return _save(img, "taikibansei_cover.png")
 
+# ---- 悠々自適(有料・単発): 自分のペースで進む、緩やかに蛇行する一本の道 ----
+def yuyujiteki():
+    import math as _m
+    img = Image.new("RGB", (W, H), BG)
+    d = ImageDraw.Draw(img)
+    x0, x1 = 800, 1190
+    cy = 335
+    pts = []
+    steps = 200
+    for i in range(steps + 1):
+        t = i / steps
+        x = x0 + t * (x1 - x0)
+        y = cy + 95 * _m.sin(t * 2.3 * _m.pi) * (0.35 + 0.65 * t)
+        pts.append((x, y))
+    d.line(pts, fill=INK, width=2, joint="curve")
+    # 道の途中で、急がず休む点(自分の適でとどまる場所。終点でも起点でもない)
+    rx, ry = pts[int(steps * 0.62)]
+    d.ellipse([rx-8, ry-8, rx+8, ry+8], fill=ACCENT)
+    # タイトル
+    draw_spaced(d, "悠々自適", 118, 214, font(120), INK, 20)
+    d.line([(126, 372), (300, 372)], fill=ACCENT, width=3)
+    d.text((126, 404), "自分の適を、自分で決める", font=font(38), fill=INK)
+    return _save(img, "yuyujiteki_cover.png")
+
 # ---- 二十四節気シリーズ(無料・連載): シリーズ見出し + 24分割の年輪 ----
 CYCLE = ["立春","雨水","啓蟄","春分","清明","穀雨","立夏","小満","芒種","夏至","小暑","大暑",
          "立秋","処暑","白露","秋分","寒露","霜降","立冬","小雪","大雪","冬至","小寒","大寒"]
@@ -192,6 +216,8 @@ def main(argv):
         negcap()
     elif len(argv) >= 2 and argv[1] == "taikibansei":
         taikibansei()
+    elif len(argv) >= 2 and argv[1] == "yuyujiteki":
+        yuyujiteki()
     elif len(argv) >= 3 and argv[1] == "sekki":
         sekki(argv[2])
     else:
