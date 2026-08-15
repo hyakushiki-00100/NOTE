@@ -210,6 +210,47 @@ def saiougauma():
     d.text((126, 404), "禍福は、糾える縄の如し", font=font(38), fill=INK)
     return _save(img, "saiougauma_cover.png")
 
+# ---- 序破急(有料・単発): 拍の密度が変わる目盛り(序=無拍節 / 破=拍子 / 急=詰まる。配分1:3:1) ----
+def johakyu():
+    import math as _m
+    img = Image.new("RGB", (W, H), BG)
+    d = ImageDraw.Draw(img)
+    x0, x1 = 792, 1192
+    base = 340
+    span = x1 - x0
+    jo_end = x0 + span * 0.2          # 序 = 1/5
+    ha_end = x0 + span * 0.8          # 破 = 3/5
+    # 序: 拍を刻まない(ゆるやかな波線のみ)
+    wave = []
+    steps = 60
+    for i in range(steps + 1):
+        t = i / steps
+        x = x0 + t * (jo_end - x0)
+        wave.append((x, base - 14 * _m.sin(t * 2 * _m.pi)))
+    d.line(wave, fill=INK, width=2, joint="curve")
+    # 破: 等間隔の拍(構造が入り、いちばん長い)
+    for i in range(7):
+        x = jo_end + (ha_end - jo_end) * (i / 6)
+        d.line([(x, base - 30), (x, base + 30)], fill=INK, width=2)
+    d.line([(jo_end, base), (ha_end, base)], fill=INK, width=1)
+    # 急: 拍が詰まり、加速して切れる
+    n = 9
+    for i in range(n):
+        t = i / (n - 1)
+        x = ha_end + (x1 - ha_end) * (t ** 1.6)
+        d.line([(x, base - 30), (x, base + 30)], fill=ACCENT, width=2)
+    d.line([(ha_end, base), (x1, base)], fill=ACCENT, width=1)
+    # 区間ラベル
+    fs = font(26)
+    d.text((x0 + (jo_end - x0) / 2 - 13, base + 56), "序", font=fs, fill=INK)
+    d.text((jo_end + (ha_end - jo_end) / 2 - 13, base + 56), "破", font=fs, fill=INK)
+    d.text((ha_end + (x1 - ha_end) / 2 - 13, base + 56), "急", font=fs, fill=ACCENT)
+    # タイトル
+    draw_spaced(d, "序破急", 118, 214, font(140), INK, 22)
+    d.line([(126, 404), (300, 404)], fill=ACCENT, width=3)
+    d.text((126, 436), "時間の、重心をどこに置くか", font=font(38), fill=INK)
+    return _save(img, "johakyu_cover.png")
+
 # ---- 二十四節気シリーズ(無料・連載): シリーズ見出し + 24分割の年輪 ----
 CYCLE = ["立春","雨水","啓蟄","春分","清明","穀雨","立夏","小満","芒種","夏至","小暑","大暑",
          "立秋","処暑","白露","秋分","寒露","霜降","立冬","小雪","大雪","冬至","小寒","大寒"]
@@ -270,6 +311,8 @@ def main(argv):
         chisoku()
     elif len(argv) >= 2 and argv[1] == "saiougauma":
         saiougauma()
+    elif len(argv) >= 2 and argv[1] == "johakyu":
+        johakyu()
     elif len(argv) >= 3 and argv[1] == "sekki":
         sekki(argv[2])
     else:
