@@ -181,6 +181,35 @@ def chisoku():
     d.text((126, 404), "吾、唯だ足るを知る", font=font(40), fill=INK)
     return _save(img, "chisoku_cover.png")
 
+# ---- 塞翁が馬(有料・単発): 禍福が糾える、二本の縒れた線 ----
+def saiougauma():
+    import math as _m
+    img = Image.new("RGB", (W, H), BG)
+    d = ImageDraw.Draw(img)
+    x0, x1 = 800, 1190
+    cy = 335
+    amp = 78
+    steps = 220
+    pts_a, pts_b = [], []
+    for i in range(steps + 1):
+        t = i / steps
+        x = x0 + t * (x1 - x0)
+        phase = t * 3.4 * _m.pi
+        pts_a.append((x, cy + amp * _m.sin(phase)))
+        pts_b.append((x, cy + amp * _m.sin(phase + _m.pi)))
+    d.line(pts_a, fill=INK, width=2, joint="curve")
+    d.line(pts_b, fill=ACCENT, width=2, joint="curve")
+    # 交差点(福と禍が入れ替わる瞬間)
+    for i in range(1, 4):
+        cxp = x0 + (x1 - x0) * (i / 4)
+        cyp = cy
+        d.ellipse([cxp-4, cyp-4, cxp+4, cyp+4], fill=INK)
+    # タイトル
+    draw_spaced(d, "塞翁が馬", 118, 214, font(110), INK, 18)
+    d.line([(126, 372), (300, 372)], fill=ACCENT, width=3)
+    d.text((126, 404), "禍福は、糾える縄の如し", font=font(38), fill=INK)
+    return _save(img, "saiougauma_cover.png")
+
 # ---- 二十四節気シリーズ(無料・連載): シリーズ見出し + 24分割の年輪 ----
 CYCLE = ["立春","雨水","啓蟄","春分","清明","穀雨","立夏","小満","芒種","夏至","小暑","大暑",
          "立秋","処暑","白露","秋分","寒露","霜降","立冬","小雪","大雪","冬至","小寒","大寒"]
@@ -239,6 +268,8 @@ def main(argv):
         yuyujiteki()
     elif len(argv) >= 2 and argv[1] == "chisoku":
         chisoku()
+    elif len(argv) >= 2 and argv[1] == "saiougauma":
+        saiougauma()
     elif len(argv) >= 3 and argv[1] == "sekki":
         sekki(argv[2])
     else:
