@@ -162,6 +162,25 @@ def yuyujiteki():
     d.text((126, 404), "自分の適を、自分で決める", font=font(38), fill=INK)
     return _save(img, "yuyujiteki_cover.png")
 
+# ---- 知足(有料・単発): 縁ちょうどまで満ちた器(こぼれず、涸れず) ----
+def chisoku():
+    img = Image.new("RGB", (W, H), BG)
+    d = ImageDraw.Draw(img)
+    cx, cy, r = 980, 330, 160
+    rim_y = cy - 18
+    # 器(下半分の弧。上端が縁)
+    d.arc([cx-r, cy-r, cx+r, cy+r], start=0, end=180, fill=INK, width=2)
+    d.line([(cx-r, cy), (cx-r, rim_y)], fill=INK, width=2)
+    d.line([(cx+r, cy), (cx+r, rim_y)], fill=INK, width=2)
+    # 水面(縁ちょうど。こぼれず、涸れず)
+    d.line([(cx-r, rim_y), (cx+r, rim_y)], fill=ACCENT, width=3)
+    d.ellipse([cx-6, rim_y-6, cx+6, rim_y+6], fill=ACCENT)
+    # タイトル
+    draw_spaced(d, "知足", 118, 214, font(150), INK, 26)
+    d.line([(126, 372), (300, 372)], fill=ACCENT, width=3)
+    d.text((126, 404), "吾、唯だ足るを知る", font=font(40), fill=INK)
+    return _save(img, "chisoku_cover.png")
+
 # ---- 二十四節気シリーズ(無料・連載): シリーズ見出し + 24分割の年輪 ----
 CYCLE = ["立春","雨水","啓蟄","春分","清明","穀雨","立夏","小満","芒種","夏至","小暑","大暑",
          "立秋","処暑","白露","秋分","寒露","霜降","立冬","小雪","大雪","冬至","小寒","大寒"]
@@ -218,6 +237,8 @@ def main(argv):
         taikibansei()
     elif len(argv) >= 2 and argv[1] == "yuyujiteki":
         yuyujiteki()
+    elif len(argv) >= 2 and argv[1] == "chisoku":
+        chisoku()
     elif len(argv) >= 3 and argv[1] == "sekki":
         sekki(argv[2])
     else:
