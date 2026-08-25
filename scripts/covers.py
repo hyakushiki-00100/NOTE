@@ -251,6 +251,46 @@ def johakyu():
     d.text((126, 436), "時間の、重心をどこに置くか", font=font(38), fill=INK)
     return _save(img, "johakyu_cover.png")
 
+# ---- 初心忘るべからず(有料・単発): 消えない基準線と、三つの起点 ----
+def shoshin():
+    img = Image.new("RGB", (W, H), BG)
+    d = ImageDraw.Draw(img)
+    x0, x1 = 800, 1190
+    base = 430          # 未熟だった地点 = ものさしの原点
+    step = 58
+    # 基準線(破線): 消さずに残す「未熟だった自分」
+    x = x0
+    while x < x1:
+        d.line([(x, base), (min(x + 11, x1), base)], fill=INK, width=1)
+        x += 20
+    # 三段の階段(段階ごとに上がる)。各段の始点が「初心」
+    seg = (x1 - x0) / 3.4
+    starts = []
+    px, py = x0, base
+    for i in range(3):
+        y = base - step * i
+        starts.append((px, y))
+        d.line([(px, y), (px + seg, y)], fill=INK, width=2)     # その段を進む
+        nx = px + seg
+        ny = y - step
+        if i < 2:
+            d.line([(nx, y), (nx, ny)], fill=INK, width=2)       # 次の段へ上がる
+        else:
+            # 老後の初心: まだ続いている(閉じない)
+            d.line([(nx, y), (nx, ny + 14)], fill=INK, width=2)
+        px, py = nx, ny
+    # 三つの初心(起点)をアクセントで示す
+    for (sx, sy) in starts:
+        d.ellipse([sx - 7, sy - 7, sx + 7, sy + 7], fill=ACCENT)
+    # 基準線から現在地までの落差(ものさし)
+    lastx = starts[-1][0] + seg
+    d.line([(lastx, base), (lastx, base - step * 2)], fill=ACCENT, width=1)
+    # タイトル
+    draw_spaced(d, "初心", 118, 214, font(150), INK, 26)
+    d.line([(126, 404), (300, 404)], fill=ACCENT, width=3)
+    d.text((126, 436), "未熟だった自分を、捨てない", font=font(38), fill=INK)
+    return _save(img, "shoshin_cover.png")
+
 # ---- 二十四節気シリーズ(無料・連載): シリーズ見出し + 24分割の年輪 ----
 CYCLE = ["立春","雨水","啓蟄","春分","清明","穀雨","立夏","小満","芒種","夏至","小暑","大暑",
          "立秋","処暑","白露","秋分","寒露","霜降","立冬","小雪","大雪","冬至","小寒","大寒"]
@@ -313,6 +353,8 @@ def main(argv):
         saiougauma()
     elif len(argv) >= 2 and argv[1] == "johakyu":
         johakyu()
+    elif len(argv) >= 2 and argv[1] == "shoshin":
+        shoshin()
     elif len(argv) >= 3 and argv[1] == "sekki":
         sekki(argv[2])
     else:
