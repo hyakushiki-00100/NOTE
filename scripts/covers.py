@@ -326,6 +326,29 @@ def suikou():
     d.text((126, 436), "一字に、驢馬を止める", font=font(38), fill=INK)
     return _save(img, "suikou_cover.png")
 
+# ---- 温故知新(有料・単発): 古い円環を尋ね直し、そこから新しい一本が分かれ出る ----
+def onkochishin():
+    import math as _m
+    img = Image.new("RGB", (W, H), BG)
+    d = ImageDraw.Draw(img)
+    cx, cy, r = 900, 330, 150
+    # 故: 古い円環(尋ね直す対象)
+    d.ellipse([cx - r, cy - r, cx + r, cy + r], outline=INK, width=2)
+    # 探り直す起点(円周上の一点。中心から見て右斜め上の方向)
+    a0 = _m.radians(-25)
+    sx, sy = cx + r * _m.cos(a0), cy + r * _m.sin(a0)
+    d.ellipse([sx - 7, sy - 7, sx + 7, sy + 7], fill=INK)
+    # 新: 中心から起点を通り、そのまま外側へ抜ける一本の直線(知新・師となって手渡す先)
+    ex, ey = cx + 280 * _m.cos(a0), cy + 280 * _m.sin(a0)
+    d.line([(sx, sy), (ex, ey)], fill=ACCENT, width=2)
+    d.polygon([(ex, ey), (ex - 12 * _m.cos(a0) + 7 * _m.sin(a0), ey - 12 * _m.sin(a0) - 7 * _m.cos(a0)),
+               (ex - 12 * _m.cos(a0) - 7 * _m.sin(a0), ey - 12 * _m.sin(a0) + 7 * _m.cos(a0))], fill=ACCENT)
+    # タイトル
+    draw_spaced(d, "温故知新", 118, 214, font(100), INK, 16)
+    d.line([(126, 372), (300, 372)], fill=ACCENT, width=3)
+    d.text((126, 404), "以て、師と為るべし", font=font(38), fill=INK)
+    return _save(img, "onkochishin_cover.png")
+
 # ---- 二十四節気シリーズ(無料・連載): シリーズ見出し + 24分割の年輪 ----
 CYCLE = ["立春","雨水","啓蟄","春分","清明","穀雨","立夏","小満","芒種","夏至","小暑","大暑",
          "立秋","処暑","白露","秋分","寒露","霜降","立冬","小雪","大雪","冬至","小寒","大寒"]
@@ -392,6 +415,8 @@ def main(argv):
         shoshin()
     elif len(argv) >= 2 and argv[1] == "suikou":
         suikou()
+    elif len(argv) >= 2 and argv[1] == "onkochishin":
+        onkochishin()
     elif len(argv) >= 3 and argv[1] == "sekki":
         sekki(argv[2])
     else:
