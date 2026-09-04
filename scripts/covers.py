@@ -291,6 +291,41 @@ def shoshin():
     d.text((126, 436), "未熟だった自分を、捨てない", font=font(38), fill=INK)
     return _save(img, "shoshin_cover.png")
 
+# ---- 推敲(有料・単発): 「推す」(一方向)と「敲く」(往復する迷い)の対比、そして一点の決着 ----
+def suikou():
+    img = Image.new("RGB", (W, H), BG)
+    d = ImageDraw.Draw(img)
+    x0 = 800
+    y_push, y_knock = 260, 420
+    length = 300
+    # 推す: 迷いのない一方向の直線
+    d.line([(x0, y_push), (x0 + length, y_push)], fill=INK, width=2)
+    d.polygon([(x0 + length, y_push), (x0 + length - 14, y_push - 8),
+               (x0 + length - 14, y_push + 8)], fill=INK)
+    # 敲く: 同じ地点への往復(迷い)を繰り返す
+    kx = x0
+    n = 5
+    step = length / n
+    for i in range(n):
+        top = y_knock - 22 if i % 2 == 0 else y_knock
+        bot = y_knock
+        d.line([(kx, bot), (kx, top)], fill=ACCENT, width=2)
+        d.line([(kx, top), (kx + step, bot if i % 2 == 0 else top - 22)], fill=ACCENT, width=1)
+        kx += step
+    d.line([(x0, y_knock), (x0 + length, y_knock)], fill=ACCENT, width=1)
+    # 決着の点(韓愈の一言が置かれた場所)
+    d.ellipse([x0 + length + 30 - 7, (y_push + y_knock) // 2 - 7,
+               x0 + length + 30 + 7, (y_push + y_knock) // 2 + 7], fill=INK)
+    # ラベル
+    fs = font(24)
+    d.text((x0 - 58, y_push - 14), "推", font=fs, fill=INK)
+    d.text((x0 - 58, y_knock - 14), "敲", font=fs, fill=ACCENT)
+    # タイトル
+    draw_spaced(d, "推敲", 118, 214, font(150), INK, 26)
+    d.line([(126, 404), (300, 404)], fill=ACCENT, width=3)
+    d.text((126, 436), "一字に、驢馬を止める", font=font(38), fill=INK)
+    return _save(img, "suikou_cover.png")
+
 # ---- 二十四節気シリーズ(無料・連載): シリーズ見出し + 24分割の年輪 ----
 CYCLE = ["立春","雨水","啓蟄","春分","清明","穀雨","立夏","小満","芒種","夏至","小暑","大暑",
          "立秋","処暑","白露","秋分","寒露","霜降","立冬","小雪","大雪","冬至","小寒","大寒"]
@@ -355,6 +390,8 @@ def main(argv):
         johakyu()
     elif len(argv) >= 2 and argv[1] == "shoshin":
         shoshin()
+    elif len(argv) >= 2 and argv[1] == "suikou":
+        suikou()
     elif len(argv) >= 3 and argv[1] == "sekki":
         sekki(argv[2])
     else:
