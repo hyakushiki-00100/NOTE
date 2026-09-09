@@ -326,6 +326,27 @@ def suikou():
     d.text((126, 436), "一字に、驢馬を止める", font=font(38), fill=INK)
     return _save(img, "suikou_cover.png")
 
+# ---- 明鏡止水(有料・単発): 水面(鏡)を挟んで上下対称に映る円 = 曇りのない反映 ----
+def meikyoshisui():
+    img = Image.new("RGB", (W, H), BG)
+    d = ImageDraw.Draw(img)
+    cx, cy = 965, 300
+    r = 78
+    gap = 34
+    # 水面(鏡の面): 一本の水平線
+    d.line([(cx - 190, cy), (cx + 190, cy)], fill=ACCENT, width=2)
+    # 上: 実像(曇りのない鏡に映すもの)
+    d.ellipse([cx - r, cy - gap - 2 * r, cx + r, cy - gap], outline=INK, width=2)
+    d.ellipse([cx - 24, cy - gap - r - 24, cx + 24, cy - gap - r + 24], fill=ACCENT)
+    # 下: 寸分違わぬ反映(止水に映る姿)
+    d.ellipse([cx - r, cy + gap, cx + r, cy + gap + 2 * r], outline=INK, width=2)
+    d.ellipse([cx - 24, cy + gap + r - 24, cx + 24, cy + gap + r + 24], fill=ACCENT)
+    # タイトル
+    draw_spaced(d, "明鏡止水", 118, 214, font(100), INK, 16)
+    d.line([(126, 372), (300, 372)], fill=ACCENT, width=3)
+    d.text((126, 404), "止まっているものだけが、映す", font=font(36), fill=INK)
+    return _save(img, "meikyoshisui_cover.png")
+
 # ---- 温故知新(有料・単発): 古い円環を尋ね直し、そこから新しい一本が分かれ出る ----
 def onkochishin():
     import math as _m
@@ -417,6 +438,8 @@ def main(argv):
         suikou()
     elif len(argv) >= 2 and argv[1] == "onkochishin":
         onkochishin()
+    elif len(argv) >= 2 and argv[1] == "meikyoshisui":
+        meikyoshisui()
     elif len(argv) >= 3 and argv[1] == "sekki":
         sekki(argv[2])
     else:
