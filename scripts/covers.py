@@ -347,6 +347,31 @@ def meikyoshisui():
     d.text((126, 404), "止まっているものだけが、映す", font=font(36), fill=INK)
     return _save(img, "meikyoshisui_cover.png")
 
+# ---- 面南見北斗(有料・単発): 南を向く矢印の先、あるはずのない北斗七星 ----
+def mennankenhokuto():
+    img = Image.new("RGB", (W, H), BG)
+    d = ImageDraw.Draw(img)
+    cx = 965
+    horizon_y = 300
+    # 地平線(向きの基準)
+    d.line([(cx - 190, horizon_y), (cx + 190, horizon_y)], fill=INK, width=1)
+    # 下: 南を向く矢印(南=下方向)
+    d.line([(cx, horizon_y + 14), (cx, horizon_y + 96)], fill=INK, width=2)
+    d.polygon([(cx, horizon_y + 112), (cx - 10, horizon_y + 90), (cx + 10, horizon_y + 90)], fill=INK)
+    d.text((cx - 10, horizon_y + 118), "南", font=font(26), fill=INK)
+    # 上: あるはずのない北斗七星(柄杓形の七星、アクセント色)
+    dipper = [(cx - 150, horizon_y - 70), (cx - 108, horizon_y - 84), (cx - 66, horizon_y - 78),
+              (cx - 38, horizon_y - 52), (cx - 2, horizon_y - 40), (cx + 30, horizon_y - 62),
+              (cx + 56, horizon_y - 100)]
+    d.line(dipper, fill=ACCENT, width=2)
+    for (px, py) in dipper:
+        d.ellipse([px - 6, py - 6, px + 6, py + 6], fill=ACCENT)
+    # タイトル
+    draw_spaced(d, "面南見北斗", 118, 214, font(82), INK, 14)
+    d.line([(126, 372), (300, 372)], fill=ACCENT, width=3)
+    d.text((126, 404), "答えは、前提の外にある", font=font(36), fill=INK)
+    return _save(img, "mennankenhokuto_cover.png")
+
 # ---- 温故知新(有料・単発): 古い円環を尋ね直し、そこから新しい一本が分かれ出る ----
 def onkochishin():
     import math as _m
@@ -440,6 +465,8 @@ def main(argv):
         onkochishin()
     elif len(argv) >= 2 and argv[1] == "meikyoshisui":
         meikyoshisui()
+    elif len(argv) >= 2 and argv[1] == "mennankenhokuto":
+        mennankenhokuto()
     elif len(argv) >= 3 and argv[1] == "sekki":
         sekki(argv[2])
     else:
