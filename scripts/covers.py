@@ -372,6 +372,33 @@ def mennankenhokuto():
     d.text((126, 404), "答えは、前提の外にある", font=font(36), fill=INK)
     return _save(img, "mennankenhokuto_cover.png")
 
+# ---- 冷暖自知(有料・単発): 器の中の水面、内側にしか波紋は見えない ----
+def reidanjichi():
+    img = Image.new("RGB", (W, H), BG)
+    d = ImageDraw.Draw(img)
+    cx = 965
+    top_y, bot_y = 190, 400
+    top_hw, bot_hw = 105, 68
+    # 器(コップ)の輪郭
+    d.line([(cx - top_hw, top_y), (cx - bot_hw, bot_y)], fill=INK, width=2)
+    d.line([(cx + top_hw, top_y), (cx + bot_hw, bot_y)], fill=INK, width=2)
+    d.line([(cx - bot_hw, bot_y), (cx + bot_hw, bot_y)], fill=INK, width=2)
+    # 水面(縁のすぐ下)
+    water_y = top_y + 28
+    water_hw = top_hw - (top_hw - bot_hw) * (water_y - top_y) / (bot_y - top_y)
+    d.line([(cx - water_hw, water_y), (cx + water_hw, water_y)], fill=INK, width=1)
+    # 水面の波紋(内側にいる者にしか見えない、という比喩)
+    for r in (14, 30, 46):
+        d.arc([cx - r, water_y - r * 0.35, cx + r, water_y + r * 0.35], start=200, end=340, fill=ACCENT, width=2)
+    # 器の外、届かない場所に置かれた「冷」「暖」の文字(外からは分からない)
+    d.text((cx - top_hw - 64, top_y - 6), "冷", font=font(30), fill=INK)
+    d.text((cx + top_hw + 24, top_y - 6), "暖", font=font(30), fill=INK)
+    # タイトル
+    draw_spaced(d, "冷暖自知", 118, 214, font(100), INK, 16)
+    d.line([(126, 372), (300, 372)], fill=ACCENT, width=3)
+    d.text((126, 404), "飲んだ人にしか、わからない", font=font(36), fill=INK)
+    return _save(img, "reidanjichi_cover.png")
+
 # ---- 温故知新(有料・単発): 古い円環を尋ね直し、そこから新しい一本が分かれ出る ----
 def onkochishin():
     import math as _m
@@ -467,6 +494,8 @@ def main(argv):
         meikyoshisui()
     elif len(argv) >= 2 and argv[1] == "mennankenhokuto":
         mennankenhokuto()
+    elif len(argv) >= 2 and argv[1] == "reidanjichi":
+        reidanjichi()
     elif len(argv) >= 3 and argv[1] == "sekki":
         sekki(argv[2])
     else:
