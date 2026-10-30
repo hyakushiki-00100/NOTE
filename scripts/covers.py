@@ -399,6 +399,35 @@ def reidanjichi():
     d.text((126, 404), "飲んだ人にしか、わからない", font=font(36), fill=INK)
     return _save(img, "reidanjichi_cover.png")
 
+# ---- 啐啄同時(有料・単発): 殻の同じ一点を、内側(啐)と外側(啄)から同時に指す ----
+def sottakudouji():
+    import math as _m
+    img = Image.new("RGB", (W, H), BG)
+    d = ImageDraw.Draw(img)
+    cx, cy, rx, ry = 965, 320, 118, 150
+    # 卵(殻)
+    d.ellipse([cx - rx, cy - ry, cx + rx, cy + ry], outline=INK, width=2)
+    # 殻の上の一点(右上、ここで内と外が出会う)
+    a = _m.radians(-40)
+    px, py = cx + rx * _m.cos(a), cy + ry * _m.sin(a)
+    # ひび(その一点から走る短い折れ線)
+    crack = [(px - 44, py - 14), (px - 26, py + 8), (px - 12, py - 6), (px - 2, py + 14), (px + 10, py + 2)]
+    d.line(crack, fill=INK, width=2)
+    # 内側からの啐: 殻の内側、同じ一点に向かう線と点
+    ix, iy = cx + (rx - 78) * _m.cos(a), cy + (ry - 78) * _m.sin(a)
+    d.line([(ix, iy), (px - 6 * _m.cos(a), py - 6 * _m.sin(a))], fill=ACCENT, width=2)
+    d.ellipse([ix - 6, iy - 6, ix + 6, iy + 6], fill=ACCENT)
+    # 外側からの啄: 殻の外、同じ一点を指す楔(くさび)形
+    ox, oy = cx + (rx + 62) * _m.cos(a), cy + (ry + 62) * _m.sin(a)
+    tip = (px + 6 * _m.cos(a), py + 6 * _m.sin(a))
+    nx, ny = -_m.sin(a), _m.cos(a)
+    d.polygon([tip, (ox + 9 * nx, oy + 9 * ny), (ox - 9 * nx, oy - 9 * ny)], fill=INK)
+    # タイトル
+    draw_spaced(d, "啐啄同時", 118, 214, font(100), INK, 16)
+    d.line([(126, 372), (300, 372)], fill=ACCENT, width=3)
+    d.text((126, 404), "内と外が、同じ瞬間に", font=font(36), fill=INK)
+    return _save(img, "sottakudouji_cover.png")
+
 # ---- 温故知新(有料・単発): 古い円環を尋ね直し、そこから新しい一本が分かれ出る ----
 def onkochishin():
     import math as _m
@@ -496,6 +525,8 @@ def main(argv):
         mennankenhokuto()
     elif len(argv) >= 2 and argv[1] == "reidanjichi":
         reidanjichi()
+    elif len(argv) >= 2 and argv[1] == "sottakudouji":
+        sottakudouji()
     elif len(argv) >= 3 and argv[1] == "sekki":
         sekki(argv[2])
     else:
