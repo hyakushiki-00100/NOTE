@@ -428,6 +428,30 @@ def sottakudouji():
     d.text((126, 404), "内と外が、同じ瞬間に", font=font(36), fill=INK)
     return _save(img, "sottakudouji_cover.png")
 
+# ---- 無事是貴人(有料・単発): 足された線(造作)が一本ずつ薄れて消え、平らな一本と一点が残る ----
+def bujikorekinin():
+    img = Image.new("RGB", (W, H), BG)
+    d = ImageDraw.Draw(img)
+    x0, x1, base = 770, 1170, 360
+    # 平常: 一本の水平線
+    d.line([(x0, base), (x1, base)], fill=INK, width=2)
+    # 造作: 左側に立つ縦の線。右へ行くほど短く、薄くなって消える
+    n = 7
+    for i in range(n):
+        t = i / (n - 1)
+        x = x0 + 18 + i * 30
+        h = int(120 * (1 - 0.82 * t))
+        mix = 0.15 + 0.8 * t  # 0→濃い, 1→背景に近い
+        col = tuple(int(INK[k] * (1 - mix) + BG[k] * mix) for k in range(3))
+        d.line([(x, base - h), (x, base - 2)], fill=col, width=3)
+    # 残る一点
+    d.ellipse([x1 - 60 - 8, base - 44 - 8, x1 - 60 + 8, base - 44 + 8], fill=ACCENT)
+    # タイトル
+    draw_spaced(d, "無事是貴人", 118, 214, font(86), INK, 14)
+    d.line([(126, 372), (300, 372)], fill=ACCENT, width=3)
+    d.text((126, 404), "但だ、造作すること莫れ", font=font(36), fill=INK)
+    return _save(img, "bujikorekinin_cover.png")
+
 # ---- 温故知新(有料・単発): 古い円環を尋ね直し、そこから新しい一本が分かれ出る ----
 def onkochishin():
     import math as _m
@@ -527,6 +551,8 @@ def main(argv):
         reidanjichi()
     elif len(argv) >= 2 and argv[1] == "sottakudouji":
         sottakudouji()
+    elif len(argv) >= 2 and argv[1] == "bujikorekinin":
+        bujikorekinin()
     elif len(argv) >= 3 and argv[1] == "sekki":
         sekki(argv[2])
     else:
